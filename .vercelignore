@@ -1,0 +1,6 @@
+.env
+.git
+tests/
+phpunit.dist.xml
+preload.php
+builds
