@@ -201,18 +201,74 @@ class Database extends Config
             $this->defaultGroup = 'tests';
         }
 
+        // Helper to retrieve env variables across $_ENV, $_SERVER, and getenv()
+        $getEnv = static function ($keys) {
+            foreach ((array)$keys as $key) {
+                $val = getenv($key);
+                if ($val !== false && $val !== null && $val !== '') {
+                    return $val;
+                }
+                if (isset($_ENV[$key]) && $_ENV[$key] !== '') {
+                    return $_ENV[$key];
+                }
+                if (isset($_SERVER[$key]) && $_SERVER[$key] !== '') {
+                    return $_SERVER[$key];
+                }
+            }
+            return null;
+        };
+
+        $host = $getEnv(['database_default_hostname', 'database.default.hostname', 'DB_HOST', 'MYSQLHOST', 'TIDB_HOST']);
+        if ($host) {
+            $this->default['hostname'] = $host;
+        }
+
+        $user = $getEnv(['database_default_username', 'database.default.username', 'DB_USER', 'MYSQLUSER', 'DB_USERNAME', 'TIDB_USER']);
+        if ($user) {
+            $this->default['username'] = $user;
+        }
+
+        $pass = $getEnv(['database_default_password', 'database.default.password', 'DB_PASSWORD', 'DB_PASS', 'MYSQLPASSWORD', 'TIDB_PASSWORD']);
+        if ($pass !== null) {
+            $this->default['password'] = $pass;
+        }
+
+        $db = $getEnv(['database_default_database', 'database.default.database', 'DB_DATABASE', 'DB_NAME', 'MYSQLDATABASE', 'TIDB_DATABASE']);
+        if ($db) {
+            $this->default['database'] = $db;
+        }
+
+        $port = $getEnv(['database_default_port', 'database.default.port', 'DB_PORT', 'MYSQLPORT', 'TIDB_PORT']);
+        if ($port) {
+            $this->default['port'] = (int)$port;
+        }
+
         // Support TiDB Cloud / Cloud MySQL SSL connections
-        $dbEncrypt = getenv('database.default.encrypt') ?: ($_ENV['database.default.encrypt'] ?? null);
-        if ($dbEncrypt === 'true' || $dbEncrypt === '1' || getenv('DB_SSL') === 'true') {
+        $isTiDB = ((int)($this->default['port'] ?? 0) === 4000)
+            || (is_string($this->default['hostname'] ?? null) && str_contains($this->default['hostname'], 'tidbcloud.com'));
+        $dbEncrypt = $getEnv(['database_default_encrypt', 'database.default.encrypt', 'DB_SSL', 'MYSQL_SSL', 'TIDB_SSL']);
+
+        if ($isTiDB || $dbEncrypt === 'true' || $dbEncrypt === '1') {
+            $caPaths = [
+                '/etc/pki/tls/certs/ca-bundle.crt',
+                '/etc/ssl/certs/ca-certificates.crt',
+                '/etc/ssl/cert.pem',
+                '/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem',
+                '/etc/ssl/ca-bundle.pem',
+            ];
+            $foundCa = null;
+            foreach ($caPaths as $ca) {
+                if (file_exists($ca)) {
+                    $foundCa = $ca;
+                    break;
+                }
+            }
+
             $this->default['encrypt'] = [
                 'ssl_verify' => false,
+                'ssl_ca'     => $foundCa ?? (is_dir('/etc/ssl/certs') ? null : '/etc/pki/tls/certs/ca-bundle.crt'),
+                'ssl_capath' => is_dir('/etc/ssl/certs') ? '/etc/ssl/certs' : null,
             ];
-            // Use Linux / Vercel system CA bundle if present
-            if (file_exists('/etc/pki/tls/certs/ca-bundle.crt')) {
-                $this->default['encrypt']['ssl_ca'] = '/etc/pki/tls/certs/ca-bundle.crt';
-            } elseif (file_exists('/etc/ssl/certs/ca-certificates.crt')) {
-                $this->default['encrypt']['ssl_ca'] = '/etc/ssl/certs/ca-certificates.crt';
-            }
         }
     }
 }

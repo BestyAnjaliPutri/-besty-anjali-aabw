@@ -5,9 +5,9 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
   <title><?= $this->renderSection('title') ?? 'SIA-IPB &mdash; Akuntansi' ?></title>
 
-  <!-- General CSS Files -->
-  <link rel="stylesheet" href="<?= base_url('template/node_modules/bootstrap/dist/css/bootstrap.min.css') ?>">
-  <link rel="stylesheet" href="<?= base_url('template/node_modules/@fortawesome/fontawesome-free/css/all.min.css') ?>">
+  <!-- General CSS Files (CDN for Vercel compatibility) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
   <!-- Template CSS -->
   <link rel="stylesheet" href="<?= base_url('template/assets/css/style.css') ?>">
@@ -38,10 +38,11 @@
     </section>
   </div>
 
-  <!-- General JS Scripts -->
-  <script src="<?= base_url('template/node_modules/jquery/dist/jquery.min.js') ?>"></script>
-  <script src="<?= base_url('template/node_modules/bootstrap/dist/js/bootstrap.min.js') ?>"></script>
-  <script src="<?= base_url('template/node_modules/nicescroll/dist/jquery.nicescroll.min.js') ?>"></script>
+  <!-- General JS Scripts (CDN for Vercel compatibility) -->
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.nicescroll/3.7.6/jquery.nicescroll.min.js"></script>
   <script src="<?= base_url('template/assets/js/stisla.js') ?>"></script>
 
   <!-- Template JS File -->

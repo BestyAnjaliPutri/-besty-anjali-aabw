@@ -118,19 +118,23 @@ h1, h2, h3, h4, h5, h6, .card-header h4, .section-header h1 {
   position: relative;
   z-index: 2;
   padding-top: 85px !important;
+}
+
+/* Only apply sidebar padding when inside the main-wrapper (not on auth pages) */
+.main-wrapper .main-content {
   padding-left: 280px !important;
   padding-right: 30px !important;
   width: 100% !important;
 }
 
 @media (max-width: 1024px) {
-  .main-content {
+  .main-wrapper .main-content {
     padding-left: 30px !important;
     padding-right: 30px !important;
   }
 }
 
-body.sidebar-mini .main-content {
+body.sidebar-mini .main-wrapper .main-content {
   padding-left: 90px !important;
 }
 
@@ -819,4 +823,79 @@ body.sidebar-mini .main-content {
     opacity: 0;
     transform: translate(var(--dx), calc(var(--dy) + 12px)) scale(0.4) rotate(var(--rot));
   }
+}
+
+/* ==========================================================================
+   CUTE AUTH / LOGIN PAGE CENTERING & STYLING
+   ========================================================================== */
+body:not(:has(.main-wrapper)) {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #fff0f3 0%, #ffccd5 50%, #ffe5ec 100%) !important;
+}
+
+body:not(:has(.main-wrapper)) #app {
+  width: 100%;
+}
+
+body:not(:has(.main-wrapper)) .container {
+  max-width: 520px;
+  margin: 0 auto !important;
+}
+
+/* Universal centering fallback */
+.offset-sm-2, .offset-md-3, .offset-lg-3, .offset-xl-4 {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  float: none !important;
+}
+
+body:not(:has(.main-wrapper)) .card.card-primary {
+  border-radius: 24px !important;
+  border: 2px solid rgba(255, 117, 143, 0.25) !important;
+  box-shadow: 0 16px 40px rgba(255, 117, 143, 0.2) !important;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+}
+
+body:not(:has(.main-wrapper)) .card.card-primary .card-header {
+  background: linear-gradient(135deg, #ff758f, #ff8fa3) !important;
+  color: #fff !important;
+  text-align: center;
+  padding: 20px 25px !important;
+  border-bottom: none !important;
+}
+
+body:not(:has(.main-wrapper)) .card.card-primary .card-header h4 {
+  color: #fff !important;
+  font-weight: 700 !important;
+  font-size: 1.25rem !important;
+  margin: 0 auto;
+  letter-spacing: 0.5px;
+}
+
+body:not(:has(.main-wrapper)) .login-brand {
+  margin-bottom: 25px !important;
+  text-align: center;
+}
+
+body:not(:has(.main-wrapper)) .login-brand img {
+  box-shadow: 0 8px 24px rgba(255, 117, 143, 0.35) !important;
+  border: 4px solid #fff;
+  transition: transform 0.3s cubic-bezier(0.34, 1.5, 0.64, 1);
+}
+
+body:not(:has(.main-wrapper)) .login-brand img:hover {
+  transform: scale(1.1) rotate(6deg);
+}
+
+body:not(:has(.main-wrapper)) .simple-footer {
+  text-align: center;
+  color: #7a5c68 !important;
+  font-weight: 600;
+  margin-top: 25px !important;
 }

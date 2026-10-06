@@ -22,9 +22,14 @@ class App extends BaseConfig
     {
         parent::__construct();
 
-        // Automatically set baseURL when running on Vercel
-        $vercelUrl = getenv('VERCEL_URL') ?: ($_SERVER['VERCEL_URL'] ?? ($_ENV['VERCEL_URL'] ?? null));
-        if ($vercelUrl) {
+        // Dynamically set baseURL based on current request host (Vercel production/preview domain, custom domain, etc.)
+        if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] !== '') {
+            $isHttps = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
+                || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
+                || (isset($_SERVER['SERVER_PORT']) && (int)$_SERVER['SERVER_PORT'] === 443);
+            $scheme = $isHttps ? 'https://' : 'http://';
+            $this->baseURL = $scheme . $_SERVER['HTTP_HOST'] . '/';
+        } elseif ($vercelUrl = getenv('VERCEL_URL') ?: ($_SERVER['VERCEL_URL'] ?? ($_ENV['VERCEL_URL'] ?? null))) {
             $this->baseURL = 'https://' . rtrim($vercelUrl, '/') . '/';
         }
     }

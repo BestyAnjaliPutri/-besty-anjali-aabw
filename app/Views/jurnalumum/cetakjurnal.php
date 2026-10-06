@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Cetak Jurnal Umum - SIA-IPB</title>
-  <link rel="stylesheet" href="<?= base_url('template/node_modules/bootstrap/dist/css/bootstrap.min.css') ?>">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
   <style>
     body {
       font-family: Arial, sans-serif;
