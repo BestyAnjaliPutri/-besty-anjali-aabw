@@ -18,8 +18,8 @@
   <link rel="stylesheet" href="<?=base_url()?>/template/assets/css/style.css">
   <link rel="stylesheet" href="<?=base_url()?>/template/assets/css/components.css">
   <link rel="stylesheet" href="<?=base_url()?>/template/assets/css/custom.css">
-  <!-- Cute Pink Pastel Sakura Theme -->
-  <link rel="stylesheet" href="<?=base_url()?>/template/assets/css/cute-theme.css">
+  <!-- Cute Pink Pastel Sakura Theme (cache-busting v=2.3.6) -->
+  <link rel="stylesheet" href="<?=base_url()?>/template/assets/css/cute-theme.css?v=2.3.6">
   <!-- Cute Pink Sakura Favicon -->
   <link rel="icon" type="image/svg+xml" href="<?= base_url('favicon.svg') ?>">
   <link rel="alternate icon" type="image/png" href="<?= base_url('favicon.png') ?>">
