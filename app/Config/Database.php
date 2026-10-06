@@ -249,7 +249,9 @@ class Database extends Config
         $dbEncrypt = $getEnv(['database_default_encrypt', 'database.default.encrypt', 'DB_SSL', 'MYSQL_SSL', 'TIDB_SSL']);
 
         if ($isTiDB || $dbEncrypt === 'true' || $dbEncrypt === '1') {
+            $bundledCa = __DIR__ . '/isrgrootx1.pem';
             $caPaths = [
+                $bundledCa,
                 '/etc/pki/tls/certs/ca-bundle.crt',
                 '/etc/ssl/certs/ca-certificates.crt',
                 '/etc/ssl/cert.pem',
@@ -266,7 +268,7 @@ class Database extends Config
 
             $this->default['encrypt'] = [
                 'ssl_verify' => false,
-                'ssl_ca'     => $foundCa ?? (is_dir('/etc/ssl/certs') ? null : '/etc/pki/tls/certs/ca-bundle.crt'),
+                'ssl_ca'     => $foundCa,
                 'ssl_capath' => is_dir('/etc/ssl/certs') ? '/etc/ssl/certs' : null,
             ];
         }
