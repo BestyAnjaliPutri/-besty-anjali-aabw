@@ -11,8 +11,8 @@
       "dest": "/public/template/$1"
     },
     {
-      "src": "/favicon.ico",
-      "dest": "/public/favicon.ico"
+      "src": "/favicon.(ico|png|svg)",
+      "dest": "/public/favicon.$1"
     },
     {
       "src": "/robots.txt",
