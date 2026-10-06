@@ -1047,3 +1047,67 @@ body:not(:has(.main-wrapper)) .simple-footer {
   font-weight: 600;
   margin-top: 25px !important;
 }
+
+/* ==========================================================================
+   DECISIVE MOBILE RESPONSIVE OVERRIDE (Screen <= 1024px)
+   Placed at the bottom so it has absolute priority over any desktop styles.
+   ========================================================================== */
+@media (max-width: 1024px) {
+  /* 1. Main Content: No 280px left padding on phones! */
+  .main-wrapper .main-content,
+  .main-content {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+    padding-top: 90px !important;
+    width: 100% !important;
+  }
+
+  /* 2. Top Navbar: full width with burger menu visible */
+  .main-navbar,
+  .navbar {
+    left: 0 !important;
+    right: 0 !important;
+    width: 100% !important;
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+  }
+
+  /* 3. Main Sidebar: off-screen by default */
+  .main-sidebar {
+    position: fixed !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: -270px !important;
+    width: 250px !important;
+    height: 100% !important;
+    z-index: 1050 !important;
+    box-shadow: 4px 0 25px rgba(255, 117, 143, 0.25) !important;
+    transition: left 0.35s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+
+  /* 4. When user clicks burger menu on phone: slide in */
+  body.sidebar-show .main-sidebar {
+    left: 0 !important;
+  }
+
+  /* 5. When closing: slide back off-screen */
+  body.sidebar-gone .main-sidebar {
+    left: -270px !important;
+  }
+
+  /* 6. Dark overlay backdrop when sidebar is open */
+  body.sidebar-show:before {
+    content: '' !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: rgba(0, 0, 0, 0.45) !important;
+    backdrop-filter: blur(2px) !important;
+    z-index: 1040 !important;
+  }
+}
+
