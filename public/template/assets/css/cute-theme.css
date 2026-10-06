@@ -849,8 +849,17 @@ body:not(:has(.main-wrapper)) #app {
 }
 
 body:not(:has(.main-wrapper)) .container {
-  max-width: 520px;
+  max-width: 100% !important;
   margin: 0 auto !important;
+}
+
+/* Override Bootstrap grid on auth page: make column full-width so card can center itself */
+body:not(:has(.main-wrapper)) .row > div[class*="col-"] {
+  flex: 0 0 100% !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding: 0 20px !important;
 }
 
 /* Universal centering fallback */
@@ -860,6 +869,7 @@ body:not(:has(.main-wrapper)) .container {
   float: none !important;
 }
 
+
 body:not(:has(.main-wrapper)) .card.card-primary {
   border-radius: 24px !important;
   border: 2px solid rgba(255, 117, 143, 0.25) !important;
@@ -867,6 +877,8 @@ body:not(:has(.main-wrapper)) .card.card-primary {
   overflow: hidden;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
+  max-width: 440px;
+  margin: 0 auto;
 }
 
 body:not(:has(.main-wrapper)) .card.card-primary .card-header {
