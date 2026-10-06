@@ -138,6 +138,13 @@ body.sidebar-mini .main-wrapper .main-content {
   padding-left: 90px !important;
 }
 
+/* Fix sidebar-mini position conflict: Stisla uses absolute, our theme uses fixed.
+   Override to absolute so collapsing sidebar doesn't break layout. */
+body.sidebar-mini .main-wrapper .main-sidebar {
+  position: absolute !important;
+}
+
+
 /* Staggered Card Entrance Animation */
 .main-content .card:nth-child(1) { animation: cuteCardStagger 0.5s 0.1s cubic-bezier(0.34, 1.4, 0.64, 1) both; }
 .main-content .card:nth-child(2) { animation: cuteCardStagger 0.5s 0.2s cubic-bezier(0.34, 1.4, 0.64, 1) both; }

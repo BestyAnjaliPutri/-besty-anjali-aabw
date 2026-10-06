@@ -6,6 +6,13 @@
  * ==============================================================================
  */
 
+// If behind Vercel SSL reverse proxy, ensure HTTPS flag is recognized
+if ((isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https')
+    || getenv('VERCEL') || isset($_SERVER['VERCEL'])) {
+    $_SERVER['HTTPS'] = 'on';
+    $_SERVER['SERVER_PORT'] = 443;
+}
+
 // On Vercel, ensure writable subdirectories exist in /tmp
 if (getenv('VERCEL') || isset($_ENV['VERCEL']) || isset($_SERVER['VERCEL'])) {
     $writableDirs = ['cache', 'session', 'logs', 'debugbar', 'uploads'];

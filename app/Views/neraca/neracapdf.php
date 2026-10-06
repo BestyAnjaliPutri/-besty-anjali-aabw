@@ -65,7 +65,7 @@
         <?php if (!empty($tgl_awal) && !empty($tgl_akhir)) : ?>
             Periode : <?= date('d F Y', strtotime($tgl_awal)) ?> s/d <?= date('d F Y', strtotime($tgl_akhir)) ?>
         <?php else : ?>
-            Periode : <?= date('d F Y') ?>
+            Periode : Per 31 Desember 2025
         <?php endif; ?>
     </div>
 
@@ -172,7 +172,7 @@
 
     <div class="signature">
         <p>
-            <?= date('l, d-m-y') ?><br>
+            Bogor, 31 Desember 2025<br>
             Pimpinan AKN<br><br><br><br>
         </p>
     </div>
