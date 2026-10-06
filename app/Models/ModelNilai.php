@@ -113,7 +113,7 @@ public function ambilNeracaSaldo($tglAwal = null, $tglAkhir = null)
                 ->where('tbl_transaksi.tanggal <=', $tglAkhir);
     }
 
-    $builder->groupBy('tbl_nilai.kode_akun3')
+    $builder->groupBy(['tbl_nilai.kode_akun3', 'akun3s.nama_akun3'])
             ->orderBy('tbl_nilai.kode_akun3', 'ASC');
 
     $query = $builder->get();
@@ -133,7 +133,7 @@ public function ambilPenyesuaian($tglAwal = null, $tglAkhir = null)
                 ->where('tbl_transaksi.tanggal <=', $tglAkhir);
     }
 
-    $builder->groupBy('tbl_nilai.kode_akun3')
+    $builder->groupBy(['tbl_nilai.kode_akun3', 'akun3s.nama_akun3'])
             ->orderBy('tbl_nilai.kode_akun3', 'ASC');
 
     $query = $builder->get();

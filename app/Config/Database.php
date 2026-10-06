@@ -272,5 +272,8 @@ class Database extends Config
                 'ssl_capath' => is_dir('/etc/ssl/certs') ? '/etc/ssl/certs' : null,
             ];
         }
+
+        // Disable strict mode so ONLY_FULL_GROUP_BY doesn't crash queries on TiDB / MySQL 8
+        $this->default['strictOn'] = false;
     }
 }
