@@ -126,4 +126,19 @@ class Session extends BaseConfig
      * seconds.
      */
     public int $lockMaxRetries = 300;
+
+    /**
+     * On Vercel, switch to DatabaseHandler so sessions persist across
+     * cold starts (file-based sessions in /tmp are ephemeral on Vercel).
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        if (getenv('VERCEL') || isset($_SERVER['VERCEL'])) {
+            $this->driver   = DatabaseHandler::class;
+            $this->savePath = 'ci_sessions';
+            $this->DBGroup  = 'default';
+        }
+    }
 }
