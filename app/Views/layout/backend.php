@@ -266,6 +266,11 @@
       <div class="main-content">
         <?= $this->renderSection("content") ?>
       </div>
+
+      <!-- !! MODAL PORTAL !! Rendered OUTSIDE .main-content to avoid CSS transform stacking context.
+           CSS transform/animation on .main-content creates a new containing block for position:fixed
+           (Bootstrap modal). Putting modals here guarantees they are never trapped inside it. -->
+      <?= $this->renderSection("modals") ?>
       <footer class="main-footer">
         <div class="footer-left">
           Copyright &copy; 2026 <div class="bullet"></div> Made with 💖 & 🌸 by <a href="#">Besty Anjali Putri Setyadi</a> &bull; SV-IPB
