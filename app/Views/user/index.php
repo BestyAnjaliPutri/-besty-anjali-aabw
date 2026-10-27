@@ -94,39 +94,6 @@
                   </form>
                 </td>
               </tr>
-
-              <!-- Modal Ganti Role -->
-              <div class="modal fade" id="modalRole-<?= $u->userid ?>" tabindex="-1" role="dialog" aria-labelledby="modalRoleLabel-<?= $u->userid ?>" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                  <div class="modal-content">
-                    <form action="<?= site_url('user/changeRole/' . $u->userid) ?>" method="post">
-                      <?= csrf_field() ?>
-                      <div class="modal-header">
-                        <h5 class="modal-title" id="modalRoleLabel-<?= $u->userid ?>">Ubah Role: <?= esc($u->username) ?></h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div class="modal-body">
-                        <div class="form-group">
-                          <label>Pilih Role / Grup</label>
-                          <select name="group_id" class="form-control" required>
-                            <?php foreach ($groups as $g) : ?>
-                              <option value="<?= $g->id ?>" <?= ($u->group_id == $g->id) ? 'selected' : '' ?>>
-                                <?= ucfirst($g->name) ?> - <?= esc($g->description) ?>
-                              </option>
-                            <?php endforeach; ?>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="modal-footer bg-whitesmoke br">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan Perubahan</button>
-                      </div>
-                    </form>
-                  </div>
-                </div>
-              </div>
               <?php endforeach; ?>
             </tbody>
           </table>
@@ -134,6 +101,41 @@
       </div>
     </div>
   </div>
+
+  <!-- Modals rendered outside of table so form buttons work properly -->
+  <?php foreach ($users as $u) : ?>
+  <div class="modal fade" id="modalRole-<?= $u->userid ?>" tabindex="-1" role="dialog" aria-labelledby="modalRoleLabel-<?= $u->userid ?>" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <form action="<?= site_url('user/changeRole/' . $u->userid) ?>" method="post">
+          <?= csrf_field() ?>
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalRoleLabel-<?= $u->userid ?>">Ubah Role: <?= esc($u->username) ?></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="form-group">
+              <label>Pilih Role / Grup</label>
+              <select name="group_id" class="form-control" required>
+                <?php foreach ($groups as $g) : ?>
+                  <option value="<?= $g->id ?>" <?= ($u->group_id == $g->id) ? 'selected' : '' ?>>
+                    <?= ucfirst($g->name) ?> - <?= esc($g->description) ?>
+                  </option>
+                <?php endforeach; ?>
+              </select>
+            </div>
+          </div>
+          <div class="modal-footer bg-whitesmoke br">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+            <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Simpan Perubahan</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <?php endforeach; ?>
 </section>
 
 <?= $this->endSection() ?>
