@@ -84,10 +84,6 @@ h1, h2, h3, h4, h5, h6, .card-header h4, .section-header h1 {
   0% {
     opacity: 0;
     transform: translateY(22px) scale(0.96);
-    filter: blur(4px);
-  }
-  40% {
-    filter: blur(0px);
   }
   70% {
     transform: translateY(-3px) scale(1.005);
@@ -98,7 +94,6 @@ h1, h2, h3, h4, h5, h6, .card-header h4, .section-header h1 {
   100% {
     opacity: 1;
     transform: translateY(0) scale(1);
-    filter: blur(0);
   }
 }
 

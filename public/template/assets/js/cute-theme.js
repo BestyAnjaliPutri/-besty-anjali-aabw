@@ -372,6 +372,18 @@
     });
   }
 
+  // 7. FIX BOOTSTRAP MODAL: Move all modals to <body> to escape stacking context
+  // CSS transforms/filters on ancestor (.main-content animation) trap position:fixed inside their bounds.
+  // Bootstrap docs recommend modals be direct children of <body>.
+  function initModalBodyFix() {
+    var modals = document.querySelectorAll('.modal');
+    for (var i = 0; i < modals.length; i++) {
+      if (modals[i].parentNode !== document.body) {
+        document.body.appendChild(modals[i]);
+      }
+    }
+  }
+
   // Run on DOM ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
@@ -380,6 +392,7 @@
       initSidebarIconWobble();
       initSidebarGlowStrip();
       initMobileSidebarToggle();
+      initModalBodyFix();
     });
   } else {
     initSakura();
@@ -387,5 +400,6 @@
     initSidebarIconWobble();
     initSidebarGlowStrip();
     initMobileSidebarToggle();
+    initModalBodyFix();
   }
 })();
