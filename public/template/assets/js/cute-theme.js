@@ -359,8 +359,11 @@
     });
 
     // When clicking outside the sidebar on mobile, close it
+    // BUT do NOT close sidebar when a Bootstrap modal is open
     $(document).on('click touchstart', function(e) {
       if ($(window).outerWidth() <= 1024 && $('body').hasClass('sidebar-show')) {
+        // If a modal is currently open, don't interfere
+        if ($('body').hasClass('modal-open') || $('.modal.show').length > 0) return;
         // If click is not inside sidebar or hamburger button, close sidebar
         if (!$(e.target).closest('.main-sidebar, [data-toggle="sidebar"]').length) {
           $('body').removeClass('sidebar-show').addClass('sidebar-gone');
