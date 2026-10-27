@@ -295,8 +295,8 @@
   </script>
   <script src="<?= base_url('template/assets/js/scripts.js') ?>"></script>
   <script src="<?= base_url('template/assets/js/custom.js') ?>"></script>
-  <!-- Cute Pink Pastel Sakura Theme JS -->
-  <script src="<?= base_url('template/assets/js/cute-theme.js') ?>"></script>
+  <!-- Cute Pink Pastel Sakura Theme JS (cache-busting) -->
+  <script src="<?= base_url('template/assets/js/cute-theme.js') ?>?v=<?= time() ?>"></script>
 
   <!-- Page Specific JS File -->
 </body>

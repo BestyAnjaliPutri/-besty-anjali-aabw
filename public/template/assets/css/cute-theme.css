@@ -1030,7 +1030,7 @@ body:not(:has(.main-wrapper)) .simple-footer {
     width: 100% !important;
   }
 
-  /* 2. Top Navbar: full width with burger menu visible */
+  /* 2. Top Navbar: full width with burger menu visible & clickable */
   .main-navbar,
   .navbar {
     left: 0 !important;
@@ -1038,7 +1038,10 @@ body:not(:has(.main-wrapper)) .simple-footer {
     width: 100% !important;
     padding-left: 15px !important;
     padding-right: 15px !important;
+    z-index: 1045 !important;
+    pointer-events: auto !important;
   }
+
 
   /* 3. Main Sidebar: completely off-screen by default on mobile */
   .main-sidebar,

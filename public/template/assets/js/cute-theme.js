@@ -339,6 +339,36 @@
     }
   }
 
+  // 6. ROBUST MOBILE SIDEBAR TOGGLE & BACKDROP
+  function initMobileSidebarToggle() {
+    // When burger icon is clicked on mobile or desktop
+    $(document).on('click', "[data-toggle='sidebar']", function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+
+      var $body = $('body');
+      if ($(window).outerWidth() <= 1024) {
+        if ($body.hasClass('sidebar-show')) {
+          $body.removeClass('sidebar-show').addClass('sidebar-gone');
+        } else {
+          $body.removeClass('sidebar-gone').addClass('sidebar-show');
+        }
+      } else {
+        $body.toggleClass('sidebar-mini');
+      }
+    });
+
+    // When clicking outside the sidebar on mobile, close it
+    $(document).on('click touchstart', function(e) {
+      if ($(window).outerWidth() <= 1024 && $('body').hasClass('sidebar-show')) {
+        // If click is not inside sidebar or hamburger button, close sidebar
+        if (!$(e.target).closest('.main-sidebar, [data-toggle="sidebar"]').length) {
+          $('body').removeClass('sidebar-show').addClass('sidebar-gone');
+        }
+      }
+    });
+  }
+
   // Run on DOM ready
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
@@ -346,11 +376,13 @@
       initPageTransition();
       initSidebarIconWobble();
       initSidebarGlowStrip();
+      initMobileSidebarToggle();
     });
   } else {
     initSakura();
     initPageTransition();
     initSidebarIconWobble();
     initSidebarGlowStrip();
+    initMobileSidebarToggle();
   }
 })();
