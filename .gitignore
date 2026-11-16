@@ -124,8 +124,5 @@ _modules/*
 /results/
 /phpunit.xml
 
-# Large 3D Models
-public/template/assets/models/*.glb
-public/template/assets/models/*.obj
+# Temporary deploy script
 public/deploy_exec.php
-public/test_cos.php
