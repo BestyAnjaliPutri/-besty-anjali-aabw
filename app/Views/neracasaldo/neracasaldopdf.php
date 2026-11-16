@@ -1,106 +1,103 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Neraca Saldo PDF</title>
+    <title>Neraca Saldo - PERUSAHAAN AKN-IPB</title>
     <style>
         body {
-            font-family: helvetica, sans-serif;
-            font-size: 10pt;
+            font-family: 'times', serif;
+            font-size: 9pt;
             color: #000;
         }
-        h2 {
+        .header-kop {
             text-align: center;
-            font-size: 14pt;
-            margin-bottom: 2px;
+            margin-bottom: 8px;
+        }
+        .company {
+            font-size: 13pt;
             font-weight: bold;
         }
-        .periode {
-            text-align: center;
+        .title {
+            font-size: 12pt;
+            font-weight: bold;
+            margin: 2px 0;
+        }
+        .period {
+            font-size: 10pt;
+            font-weight: bold;
+        }
+        .currency {
+            text-align: right;
             font-size: 9pt;
-            margin-top: 0;
-            margin-bottom: 15px;
+            margin-bottom: 4px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
             font-size: 9pt;
         }
+        th, td {
+            border: 0.5px solid #000;
+            padding: 4px 5px;
+        }
         th {
             font-weight: bold;
-            padding: 4px 2px;
-        }
-        td {
-            padding: 3px 2px;
-        }
-        .border-top {
-            border-top: 1px solid #000;
-        }
-        .border-bottom {
-            border-bottom: 1px solid #000;
-        }
-        .text-right {
-            text-align: right;
-        }
-        .text-center {
             text-align: center;
         }
-        .signature {
-            margin-top: 25px;
-            font-size: 9pt;
-        }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
     </style>
 </head>
 <body>
 
-    <h2>Neraca Saldo</h2>
-    <div class="periode">
-        <?php if (!empty($tgl_awal) && !empty($tgl_akhir)) : ?>
-            Periode : <?= date('d F Y', strtotime($tgl_awal)) ?> s/d <?= date('d F Y', strtotime($tgl_akhir)) ?>
-        <?php else : ?>
-            Periode : 01 Desember 2025 s/d 31 Desember 2025
-        <?php endif; ?>
+    <div class="header-kop">
+        <div class="company">PERUSAHAAN AKN-IPB</div>
+        <div class="title">NERACA SALDO</div>
+        <div class="period">
+            <?php if (!empty($tgl_akhir)) : ?>
+                Periode <?= date('d F Y', strtotime($tgl_akhir)) ?>
+            <?php elseif (!empty($tgl_awal) && !empty($tgl_akhir)) : ?>
+                Periode <?= date('d F Y', strtotime($tgl_awal)) ?> s/d <?= date('d F Y', strtotime($tgl_akhir)) ?>
+            <?php else : ?>
+                Periode 31 Desember 2025
+            <?php endif; ?>
+        </div>
     </div>
 
-    <table cellpadding="3" cellspacing="0">
+    <div class="currency">
+        (Rp)
+    </div>
+
+    <table cellpadding="3" cellspacing="0" border="1">
         <thead>
-            <tr class="border-top">
-                <th width="12%">Kode<br>Akun</th>
-                <th width="48%">Keterangan</th>
-                <th width="40%" colspan="2" class="text-center">Saldo<br><span style="font-weight:normal;">Debit &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Kredit</span></th>
+            <tr>
+                <th width="8%" rowspan="2" class="text-center"><b>No</b></th>
+                <th width="52%" rowspan="2" class="text-center"><b>Akun</b></th>
+                <th width="40%" colspan="2" class="text-center"><b>Saldo</b></th>
             </tr>
-            <tr class="border-bottom">
-                <th width="12%"></th>
-                <th width="48%"></th>
-                <th width="20%" class="text-right"></th>
-                <th width="20%" class="text-right"></th>
+            <tr>
+                <th width="20%" class="text-center"><b>Debit</b></th>
+                <th width="20%" class="text-center"><b>Kredit</b></th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($dtneraca as $row) : ?>
+            <?php foreach ($dtneraca as $key => $row) : ?>
                 <tr>
-                    <td width="12%"><?= $row->kode_akun3 ?></td>
-                    <td width="48%"><?= $row->nama_akun3 ?></td>
-                    <td width="20%" class="text-right"><?= $row->debet > 0 ? number_format($row->debet) : '0' ?></td>
-                    <td width="20%" class="text-right"><?= $row->kredit > 0 ? number_format($row->kredit) : '0' ?></td>
+                    <td width="8%" class="text-center"><?= $key + 1 ?></td>
+                    <td width="52%"><?= esc($row->nama_akun3) ?></td>
+                    <td width="20%" class="text-right"><?= $row->debet > 0 ? number_format($row->debet, 0, ',', '.') : '-' ?></td>
+                    <td width="20%" class="text-right"><?= $row->kredit > 0 ? number_format($row->kredit, 0, ',', '.') : '-' ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
         <tfoot>
-            <tr class="border-top border-bottom">
-                <td width="12%"></td>
-                <td width="48%"></td>
-                <td width="20%" class="text-right"><b><?= number_format($totDebet) ?></b></td>
-                <td width="20%" class="text-right"><b><?= number_format($totKredit) ?></b></td>
+            <tr style="font-weight: bold;">
+                <td colspan="2" class="text-center"><b>TOTAL</b></td>
+                <td class="text-right"><b><?= number_format($totDebet, 0, ',', '.') ?></b></td>
+                <td class="text-right"><b><?= number_format($totKredit, 0, ',', '.') ?></b></td>
             </tr>
         </tfoot>
     </table>
-
-    <div class="signature">
-        <p>
-            Bogor, 31 Desember 2025<br>
-            Pimpinan AKN<br><br><br><br>
-        </p>
-    </div>
 
 </body>
 </html>

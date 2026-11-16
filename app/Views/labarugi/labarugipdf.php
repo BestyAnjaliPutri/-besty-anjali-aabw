@@ -1,125 +1,120 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Laporan Laba Rugi PDF</title>
+    <title>Laporan Laba Rugi - PERUSAHAAN AKN-IPB</title>
     <style>
         body {
-            font-family: helvetica, sans-serif;
-            font-size: 9pt;
+            font-family: 'times', serif;
+            font-size: 9.5pt;
             color: #000;
         }
-        h2 {
+        .header-kop {
             text-align: center;
-            font-size: 14pt;
-            margin-bottom: 2px;
+            margin-bottom: 12px;
+        }
+        .company {
+            font-size: 13pt;
             font-weight: bold;
         }
-        .periode {
-            text-align: center;
-            font-size: 9pt;
-            margin-top: 0;
-            margin-bottom: 15px;
+        .title {
+            font-size: 12pt;
+            font-weight: bold;
+            margin: 2px 0;
+        }
+        .period {
+            font-size: 10pt;
+            font-weight: bold;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 9pt;
+            font-size: 9.5pt;
         }
         th, td {
             padding: 4px 3px;
         }
         .border-top {
-            border-top: 1px solid #000;
+            border-top: 0.5px solid #000;
         }
         .border-bottom {
-            border-bottom: 1px solid #000;
+            border-bottom: 0.5px solid #000;
         }
-        .text-right {
-            text-align: right;
+        .border-double {
+            border-bottom: 1.5px double #000;
         }
-        .text-center {
-            text-align: center;
-        }
-        .signature {
-            margin-top: 25px;
-            font-size: 9pt;
-        }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
     </style>
 </head>
 <body>
 
-    <h2>Laporan Laba Rugi</h2>
-    <div class="periode">
-        <?php if (!empty($tgl_awal) && !empty($tgl_akhir)) : ?>
-            Periode : <?= date('d F Y', strtotime($tgl_awal)) ?> s/d <?= date('d F Y', strtotime($tgl_akhir)) ?>
-        <?php else : ?>
-            Periode : 01 Desember 2025 s/d 31 Desember 2025
-        <?php endif; ?>
+    <div class="header-kop">
+        <div class="company">PERUSAHAAN AKN-IPB</div>
+        <div class="title">LAPORAN LABA RUGI</div>
+        <div class="period">
+            Untuk Tahun Yang Berakhir <?= !empty($tgl_akhir) ? date('d F Y', strtotime($tgl_akhir)) : '31 Desember 2025' ?>
+        </div>
     </div>
 
-    <table cellpadding="3" cellspacing="0">
+    <table cellpadding="4" cellspacing="0">
         <!-- 1. PENDAPATAN -->
         <thead>
-            <tr class="border-top border-bottom" style="background-color: #f5f5f5;">
-                <th width="15%"><b>Kode</b></th>
-                <th width="60%"><b>Pendapatan Usaha</b></th>
-                <th width="25%" class="text-right"><b>Jumlah</b></th>
+            <tr>
+                <th width="15%" class="text-left border-top border-bottom"><b>Kode</b></th>
+                <th width="55%" class="text-left border-top border-bottom"><b>Pendapatan Usaha</b></th>
+                <th width="30%" class="text-right border-top border-bottom"><b>Jumlah (Rp)</b></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($pendapatan as $p) : ?>
                 <tr>
                     <td width="15%"><?= $p->kode_akun3 ?></td>
-                    <td width="60%"><?= $p->nama_akun3 ?></td>
-                    <td width="25%" class="text-right"><?= number_format($p->jumlah) ?></td>
+                    <td width="55%"><?= esc($p->nama_akun3) ?></td>
+                    <td width="30%" class="text-right"><?= number_format($p->jumlah, 0, ',', '.') ?></td>
                 </tr>
             <?php endforeach; ?>
             <tr class="border-top">
                 <td width="15%"></td>
-                <td width="60%"><b>Total Pendapatan</b></td>
-                <td width="25%" class="text-right"><b><?= number_format($totPendapatan) ?></b></td>
+                <td width="55%"><b>Total Pendapatan</b></td>
+                <td width="30%" class="text-right"><b><?= number_format($totPendapatan, 0, ',', '.') ?></b></td>
             </tr>
+            <tr><td colspan="3">&nbsp;</td></tr>
         </tbody>
 
         <!-- 2. BEBAN -->
         <thead>
-            <tr class="border-top border-bottom" style="background-color: #f5f5f5;">
-                <th width="15%"><b>Kode</b></th>
-                <th width="60%"><b>Beban Usaha</b></th>
-                <th width="25%" class="text-right"><b>Jumlah</b></th>
+            <tr>
+                <th width="15%" class="text-left border-top border-bottom"><b>Kode</b></th>
+                <th width="55%" class="text-left border-top border-bottom"><b>Beban Usaha</b></th>
+                <th width="30%" class="text-right border-top border-bottom"><b>Jumlah (Rp)</b></th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($beban as $b) : ?>
                 <tr>
                     <td width="15%"><?= $b->kode_akun3 ?></td>
-                    <td width="60%"><?= $b->nama_akun3 ?></td>
-                    <td width="25%" class="text-right"><?= number_format($b->jumlah) ?></td>
+                    <td width="55%"><?= esc($b->nama_akun3) ?></td>
+                    <td width="30%" class="text-right"><?= number_format($b->jumlah, 0, ',', '.') ?></td>
                 </tr>
             <?php endforeach; ?>
             <tr class="border-top">
                 <td width="15%"></td>
-                <td width="60%"><b>Total Beban</b></td>
-                <td width="25%" class="text-right"><b><?= number_format($totBeban) ?></b></td>
+                <td width="55%"><b>Total Beban</b></td>
+                <td width="30%" class="text-right"><b><?= number_format($totBeban, 0, ',', '.') ?></b></td>
             </tr>
+            <tr><td colspan="3">&nbsp;</td></tr>
         </tbody>
 
         <!-- 3. LABA / RUGI BERSIH -->
         <tfoot>
-            <tr class="border-top border-bottom" style="background-color: #eaeaea;">
+            <tr class="border-top border-double">
                 <td width="15%"></td>
-                <td width="60%"><b><?= $labaBersih >= 0 ? 'Laba Bersih Usaha' : 'Rugi Bersih Usaha' ?></b></td>
-                <td width="25%" class="text-right"><b><?= number_format($labaBersih) ?></b></td>
+                <td width="55%"><b><?= $labaBersih >= 0 ? 'LABA BERSIH' : 'RUGI BERSIH' ?></b></td>
+                <td width="30%" class="text-right"><b>Rp <?= number_format($labaBersih, 0, ',', '.') ?></b></td>
             </tr>
         </tfoot>
     </table>
-
-    <div class="signature">
-        <p>
-            Bogor, 31 Desember 2025<br>
-            Pimpinan AKN<br><br><br><br>
-        </p>
-    </div>
 
 </body>
 </html>

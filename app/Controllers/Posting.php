@@ -20,52 +20,89 @@ class Posting extends BaseController
         $this->objTransaksi = new ModelTransaksi();
     }
 
+    private function generateDataPosting($kodeAkun = null, $tglAwal = null, $tglAkhir = null)
+    {
+        $dtakun3 = $this->objAkun3->orderBy('kode_akun3', 'ASC')->findAll();
+
+        if (!empty($kodeAkun)) {
+            $allAkun = $this->objAkun3->where('kode_akun3', $kodeAkun)->findAll();
+            $rawPosting = $this->objNilai->ambilPosting($kodeAkun, $tglAwal, $tglAkhir);
+        } else {
+            $allAkun = $dtakun3;
+            $rawPosting = $this->objNilai->ambilPosting(null, $tglAwal, $tglAkhir);
+        }
+
+        // Group transactions by kode_akun3
+        $mapPosting = [];
+        foreach ($rawPosting as $r) {
+            $mapPosting[$r->kode_akun3][] = $r;
+        }
+
+        $bukuBesar = [];
+        foreach ($allAkun as $ak) {
+            $akObj = (object)$ak;
+            $kode  = $akObj->kode_akun3;
+            $nama  = $akObj->nama_akun3 ?? $akObj->nama_akun ?? '';
+            $kepala = substr((string)$kode, 0, 1);
+
+            $isNormalDebet = ($kode === '3201' || $kode === '4202' || in_array($kepala, ['1', '5']));
+            if ($kode === '1202') {
+                $isNormalDebet = false; // Akumulasi penyusutan normal kredit
+            }
+
+            $mutasiList = $mapPosting[$kode] ?? [];
+
+            $saldo = 0;
+            $rows  = [];
+            $totD  = 0;
+            $totK  = 0;
+
+            foreach ($mutasiList as $m) {
+                $d = floatval($m->debet ?? $m->debit ?? 0);
+                $k = floatval($m->kredit ?? 0);
+                $totD += $d;
+                $totK += $k;
+
+                if ($isNormalDebet) {
+                    $saldo += ($d - $k);
+                    $m->saldo_debet  = ($saldo >= 0) ? $saldo : 0;
+                    $m->saldo_kredit = ($saldo < 0) ? abs($saldo) : 0;
+                } else {
+                    $saldo += ($k - $d);
+                    $m->saldo_kredit = ($saldo >= 0) ? $saldo : 0;
+                    $m->saldo_debet  = ($saldo < 0) ? abs($saldo) : 0;
+                }
+
+                $rows[] = $m;
+            }
+
+            $bukuBesar[] = [
+                'kode_akun3'   => $kode,
+                'nama_akun3'   => $nama,
+                'posisiNormal' => $isNormalDebet ? 'debet' : 'kredit',
+                'mutasi'       => $rows,
+                'totDebet'     => $totD,
+                'totKredit'    => $totK,
+                'saldoAkhir'   => $saldo,
+            ];
+        }
+
+        return [
+            'dtakun3'    => $dtakun3,
+            'kode_akun3' => $kodeAkun,
+            'tgl_awal'   => $tglAwal,
+            'tgl_akhir'  => $tglAkhir,
+            'bukuBesar'  => $bukuBesar,
+        ];
+    }
+
     public function index()
     {
-        $dtakun3   = $this->objAkun3->orderBy('kode_akun3', 'ASC')->findAll();
         $kodeAkun  = $this->request->getVar('kode_akun3');
         $tglAwal   = $this->request->getVar('tgl_awal');
         $tglAkhir  = $this->request->getVar('tgl_akhir');
 
-        $selectedAkun = null;
-        $posisiNormal = 'debet';
-        if (!empty($kodeAkun)) {
-            $selectedAkun = $this->objAkun3->where('kode_akun3', $kodeAkun)->first();
-            $dtposting    = $this->objNilai->ambilPosting($kodeAkun, $tglAwal, $tglAkhir);
-            $kepala = substr((string)$kodeAkun, 0, 1);
-            $posisiNormal = in_array($kepala, ['2', '3', '4']) ? 'kredit' : 'debet';
-        } else {
-            $dtposting    = $this->objNilai->ambilPosting(null, $tglAwal, $tglAkhir);
-        }
-
-        $saldoBerjalan = 0;
-        $totDebet      = 0;
-        $totKredit     = 0;
-        foreach ($dtposting as $row) {
-            $valDebet  = $row->debet ?? $row->debit ?? 0;
-            $valKredit = $row->kredit ?? 0;
-
-            $totDebet  += $valDebet;
-            $totKredit += $valKredit;
-
-            $saldoBerjalan += ($valDebet - $valKredit);
-            $row->saldo_debet  = ($saldoBerjalan >= 0) ? $saldoBerjalan : 0;
-            $row->saldo_kredit = ($saldoBerjalan < 0) ? abs($saldoBerjalan) : 0;
-        }
-        $saldoAkhir = $saldoBerjalan;
-
-        $data = [
-            'dtakun3'       => $dtakun3,
-            'selectedAkun'  => $selectedAkun,
-            'kode_akun3'    => $kodeAkun,
-            'dtposting'     => $dtposting,
-            'tgl_awal'      => $tglAwal,
-            'tgl_akhir'     => $tglAkhir,
-            'totDebet'      => $totDebet,
-            'totKredit'     => $totKredit,
-            'saldoAkhir'    => $saldoAkhir,
-            'posisiNormal'  => $posisiNormal,
-        ];
+        $data = $this->generateDataPosting($kodeAkun, $tglAwal, $tglAkhir);
 
         return view('posting/index', $data);
     }
@@ -76,45 +113,32 @@ class Posting extends BaseController
         $tglAwal   = $this->request->getVar('tgl_awal');
         $tglAkhir  = $this->request->getVar('tgl_akhir');
 
-        $selectedAkun = null;
-        $posisiNormal = 'debet';
-        if (!empty($kodeAkun)) {
-            $selectedAkun = $this->objAkun3->where('kode_akun3', $kodeAkun)->first();
-            $dtposting    = $this->objNilai->ambilPosting($kodeAkun, $tglAwal, $tglAkhir);
-            $kepala = substr((string)$kodeAkun, 0, 1);
-            $posisiNormal = in_array($kepala, ['2', '3', '4']) ? 'kredit' : 'debet';
-        } else {
-            $dtposting    = $this->objNilai->ambilPosting(null, $tglAwal, $tglAkhir);
-        }
-
-        $saldoBerjalan = 0;
-        $totDebet      = 0;
-        $totKredit     = 0;
-        foreach ($dtposting as $row) {
-            $valDebet  = $row->debet ?? $row->debit ?? 0;
-            $valKredit = $row->kredit ?? 0;
-
-            $totDebet  += $valDebet;
-            $totKredit += $valKredit;
-
-            $saldoBerjalan += ($valDebet - $valKredit);
-            $row->saldo_debet  = ($saldoBerjalan >= 0) ? $saldoBerjalan : 0;
-            $row->saldo_kredit = ($saldoBerjalan < 0) ? abs($saldoBerjalan) : 0;
-        }
-        $saldoAkhir = $saldoBerjalan;
-
-        $data = [
-            'selectedAkun'  => $selectedAkun,
-            'kode_akun3'    => $kodeAkun,
-            'dtposting'     => $dtposting,
-            'tgl_awal'      => $tglAwal,
-            'tgl_akhir'     => $tglAkhir,
-            'totDebet'      => $totDebet,
-            'totKredit'     => $totKredit,
-            'saldoAkhir'    => $saldoAkhir,
-            'posisiNormal'  => $posisiNormal,
-        ];
+        $data = $this->generateDataPosting($kodeAkun, $tglAwal, $tglAkhir);
 
         return view('posting/cetakposting', $data);
+    }
+
+    public function postingpdf()
+    {
+        $kodeAkun  = $this->request->getVar('kode_akun3');
+        $tglAwal   = $this->request->getVar('tgl_awal');
+        $tglAkhir  = $this->request->getVar('tgl_akhir');
+
+        $data = $this->generateDataPosting($kodeAkun, $tglAwal, $tglAkhir);
+
+        $html = view('posting/postingpdf', $data);
+
+        $pdf = new \TCPDF('P', 'mm', 'A4', true, 'UTF-8', false);
+        $pdf->setPrintHeader(false);
+        $pdf->setPrintFooter(false);
+        $pdf->SetMargins(15, 12, 15);
+        $pdf->SetAutoPageBreak(TRUE, 12);
+        $pdf->AddPage();
+        $pdf->SetFont('times', '', 9);
+        $pdf->writeHTML($html, true, false, true, false, '');
+
+        $this->response->setHeader('Content-Type', 'application/pdf');
+        $pdf->Output('Buku_Besar_PERUSAHAAN_AKN_IPB.pdf', 'I');
+        exit;
     }
 }

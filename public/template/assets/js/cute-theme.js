@@ -8,10 +8,11 @@
 (function () {
   'use strict';
 
-  // 1. SETUP CANVAS SAKURA
+  // 1. SETUP CANVAS SAKURA (Lush Cherry Blossom Season in Japan)
   var canvas, ctx, width, height;
   var petals = [];
-  var totalPetals = 28; // Optimal count for beauty & smooth 60fps
+  var isMobile = window.innerWidth < 768;
+  var totalPetals = isMobile ? 35 : 60; // Lush cherry blossom blizzard at 60fps
   var isSakuraActive = localStorage.getItem('cuteSakuraActive') !== 'false';
   var animationFrameId = null;
 

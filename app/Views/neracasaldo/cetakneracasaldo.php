@@ -2,52 +2,76 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Cetak Neraca Saldo</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+  <title>Neraca Saldo - PERUSAHAAN AKN-IPB</title>
   <style>
+    @page {
+      size: A4 portrait;
+      margin: 15mm 15mm 15mm 15mm;
+    }
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Times New Roman', Times, serif;
       color: #000;
       background-color: #fff;
-      padding: 20px;
+      margin: 0;
+      padding: 10px 20px;
+      font-size: 10pt;
     }
     .header-kop {
       text-align: center;
-      border-bottom: 3px double #000;
-      padding-bottom: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
     }
-    .header-kop h3 {
-      margin: 0;
-      font-size: 20px;
+    .header-kop .company {
+      font-size: 14pt;
       font-weight: bold;
-      text-transform: uppercase;
+      letter-spacing: 0.5px;
     }
-    .header-kop h4 {
-      margin: 4px 0;
-      font-size: 16px;
+    .header-kop .title {
+      font-size: 13pt;
+      font-weight: bold;
+      margin: 2px 0;
+    }
+    .header-kop .period {
+      font-size: 11pt;
       font-weight: bold;
     }
-    .header-kop p {
-      margin: 0;
-      font-size: 12px;
-      color: #444;
+    .currency {
+      text-align: right;
+      font-size: 10pt;
+      margin-bottom: 4px;
     }
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 13px;
+      font-size: 9.5pt;
     }
     table th, table td {
-      border: 1px solid #000 !important;
-      padding: 6px 8px;
+      border: 1px solid #000;
+      padding: 5px 6px;
     }
+    table th {
+      font-weight: bold;
+      text-align: center;
+      background-color: #fff;
+    }
+    .text-center { text-align: center; }
+    .text-right { text-align: right; }
+    .text-left { text-align: left; }
     .no-print {
       margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+    }
+    .btn {
+      padding: 6px 14px;
+      font-size: 9pt;
+      cursor: pointer;
+      border: 1px solid #333;
+      background: #f0f0f0;
+      border-radius: 4px;
     }
     @media print {
       .no-print {
-        display: none;
+        display: none !important;
       }
       body {
         padding: 0;
@@ -57,76 +81,69 @@
 </head>
 <body>
 
-  <div class="no-print d-flex justify-content-between align-items-center">
-    <button onclick="window.print()" class="btn btn-primary btn-sm">
-      <i class="fas fa-print"></i> Cetak / Print Sekarang
+  <div class="no-print">
+    <button onclick="window.print()" class="btn">
+      🖨️ Cetak / Print Sekarang
     </button>
-    <button onclick="window.close()" class="btn btn-secondary btn-sm">
+    <button onclick="window.close()" class="btn">
       Tutup Halaman
     </button>
   </div>
 
   <div class="header-kop">
-    <h3>SIA AKN SV-IPB</h3>
-    <h4>NERACA SALDO</h4>
-    <p>
-      <?php if (!empty($tgl_awal) && !empty($tgl_akhir)) : ?>
-        Periode: <?= date('d/m/Y', strtotime($tgl_awal)) ?> s/d <?= date('d/m/Y', strtotime($tgl_akhir)) ?>
+    <div class="company">PERUSAHAAN AKN-IPB</div>
+    <div class="title">NERACA SALDO</div>
+    <div class="period">
+      <?php if (!empty($tgl_akhir)) : ?>
+        Periode <?= date('d F Y', strtotime($tgl_akhir)) ?>
+      <?php elseif (!empty($tgl_awal) && !empty($tgl_akhir)) : ?>
+        Periode <?= date('d F Y', strtotime($tgl_awal)) ?> s/d <?= date('d F Y', strtotime($tgl_akhir)) ?>
       <?php else : ?>
-        Semua Periode Transaksi
+        Periode 31 Desember 2025
       <?php endif; ?>
-    </p>
+    </div>
+  </div>
+
+  <div class="currency">
+    (Rp)
   </div>
 
   <table>
     <thead>
-      <tr class="text-center" style="background-color: #f0f0f0;">
-        <th style="width: 5%">No</th>
-        <th style="width: 15%">Kode Akun</th>
-        <th style="width: 44%">Nama Akun</th>
-        <th style="width: 18%">Debit (Rp)</th>
-        <th style="width: 18%">Kredit (Rp)</th>
+      <tr>
+        <th rowspan="2" style="width: 8%;">No</th>
+        <th rowspan="2" style="width: 52%;">Akun</th>
+        <th colspan="2" style="width: 40%;">Saldo</th>
+      </tr>
+      <tr>
+        <th style="width: 20%;">Debit</th>
+        <th style="width: 20%;">Kredit</th>
       </tr>
     </thead>
     <tbody>
       <?php if (empty($dtneraca)) : ?>
         <tr>
-          <td colspan="5" class="text-center py-3">Tidak ada data transaksi pada periode ini.</td>
+          <td colspan="4" class="text-center" style="padding: 15px;">Tidak ada data transaksi pada periode ini.</td>
         </tr>
       <?php else : ?>
         <?php foreach ($dtneraca as $key => $row) : ?>
           <tr>
             <td class="text-center"><?= $key + 1 ?></td>
-            <td class="text-center"><?= $row->kode_akun3 ?></td>
-            <td><?= $row->nama_akun3 ?></td>
-            <td class="text-right"><?= $row->debet > 0 ? number_format($row->debet) : '-' ?></td>
-            <td class="text-right"><?= $row->kredit > 0 ? number_format($row->kredit) : '-' ?></td>
+            <td><?= esc($row->nama_akun3) ?></td>
+            <td class="text-right"><?= $row->debet > 0 ? number_format($row->debet, 0, ',', '.') : '-' ?></td>
+            <td class="text-right"><?= $row->kredit > 0 ? number_format($row->kredit, 0, ',', '.') : '-' ?></td>
           </tr>
         <?php endforeach; ?>
       <?php endif; ?>
     </tbody>
     <tfoot>
-      <tr style="background-color: #f0f0f0; font-weight: bold;">
-        <td colspan="3" class="text-center">TOTAL</td>
-        <td class="text-right">Rp <?= number_format($totDebet) ?></td>
-        <td class="text-right">Rp <?= number_format($totKredit) ?></td>
+      <tr style="font-weight: bold;">
+        <td colspan="2" class="text-center">TOTAL</td>
+        <td class="text-right"><?= number_format($totDebet, 0, ',', '.') ?></td>
+        <td class="text-right"><?= number_format($totKredit, 0, ',', '.') ?></td>
       </tr>
     </tfoot>
   </table>
-
-  <!-- Tanda Tangan -->
-  <div style="margin-top: 40px; display: flex; justify-content: space-between; padding: 0 40px;">
-    <div style="text-align: center;">
-      <p>Mengetahui,<br><strong>Pimpinan Perusahaan</strong></p>
-      <br><br><br>
-      <p>( ________________________ )</p>
-    </div>
-    <div style="text-align: center;">
-      <p>Bogor, <?= date('d F Y') ?><br><strong>Bagian Keuangan</strong></p>
-      <br><br><br>
-      <p>( ________________________ )</p>
-    </div>
-  </div>
 
 </body>
 </html>

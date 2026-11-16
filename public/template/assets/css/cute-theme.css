@@ -45,6 +45,18 @@
 }
 
 /* --------------------------------------------------------------------------
+ * Hide CodeIgniter Debug Toolbar / Flame Icon
+ * -------------------------------------------------------------------------- */
+#debug-icon, #debug-bar, .ci-debug-toolbar, a[title="Debug Bar"] {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* --------------------------------------------------------------------------
  * Global Typography & Body
  * -------------------------------------------------------------------------- */
 body {
@@ -849,17 +861,41 @@ h1, h2, h3, h4, h5, h6, .card-header h4, .section-header h1 {
 }
 
 /* --------------------------------------------------------------------------
- * Main Footer
+ * Main Footer (Aligned with Stisla Sidebar & Mini-Sidebar)
  * -------------------------------------------------------------------------- */
 .main-footer {
   background: #ffffff !important;
   border-top: 1.5px solid #ffe5ec !important;
-  padding: 18px 24px !important;
+  padding-top: 18px !important;
+  padding-bottom: 18px !important;
+  padding-left: 280px !important; /* Space for full sidebar (250px) + margin */
+  padding-right: 85px !important; /* Space for floating sakura button */
   color: #8c737d !important;
   font-weight: 600;
   border-top-left-radius: 18px;
   border-top-right-radius: 18px;
   box-shadow: 0 -4px 16px rgba(255, 182, 193, 0.1);
+  transition: padding-left 0.3s ease !important;
+  position: relative;
+  z-index: 10;
+}
+
+body.sidebar-mini .main-footer {
+  padding-left: 95px !important; /* Space for mini sidebar (65px) + generous breathing room */
+}
+
+@media (max-width: 1024px) {
+  .main-footer {
+    padding-left: 30px !important;
+    padding-right: 75px !important;
+  }
+}
+
+.main-footer .footer-left {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
 }
 
 .main-footer a {

@@ -182,7 +182,7 @@ class NeracaLajur extends BaseController
         $pdf->setPrintFooter(false);
         $pdf->SetMargins(10, 10, 10);
         $pdf->AddPage();
-        $pdf->SetFont('helvetica', '', 8);
+        $pdf->SetFont('times', '', 8);
         $pdf->writeHTML($html, true, false, true, false, '');
 
         $this->response->setHeader('Content-Type', 'application/pdf');

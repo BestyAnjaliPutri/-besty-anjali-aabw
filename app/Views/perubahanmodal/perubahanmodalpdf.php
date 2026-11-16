@@ -1,95 +1,88 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Laporan Perubahan Modal PDF</title>
+    <title>Laporan Perubahan Modal - PERUSAHAAN AKN-IPB</title>
     <style>
         body {
-            font-family: helvetica, sans-serif;
-            font-size: 9pt;
+            font-family: 'times', serif;
+            font-size: 9.5pt;
             color: #000;
         }
-        h2 {
+        .header-kop {
             text-align: center;
-            font-size: 14pt;
-            margin-bottom: 2px;
+            margin-bottom: 12px;
+        }
+        .company {
+            font-size: 13pt;
             font-weight: bold;
         }
-        .periode {
-            text-align: center;
-            font-size: 9pt;
-            margin-top: 0;
-            margin-bottom: 20px;
+        .title {
+            font-size: 12pt;
+            font-weight: bold;
+            margin: 2px 0;
+        }
+        .period {
+            font-size: 10pt;
+            font-weight: bold;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 9pt;
+            font-size: 9.5pt;
         }
         td {
             padding: 5px 3px;
         }
         .border-top {
-            border-top: 1px solid #000;
+            border-top: 0.5px solid #000;
         }
         .border-bottom {
-            border-bottom: 1px solid #000;
+            border-bottom: 0.5px solid #000;
         }
-        .text-right {
-            text-align: right;
+        .border-double {
+            border-bottom: 1.5px double #000;
         }
-        .text-center {
-            text-align: center;
-        }
-        .signature {
-            margin-top: 30px;
-            font-size: 9pt;
-        }
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
     </style>
 </head>
 <body>
 
-    <h2>Laporan Perubahan Modal</h2>
-    <div class="periode">
-        <?php if (!empty($tgl_awal) && !empty($tgl_akhir)) : ?>
-            Periode : <?= date('d F Y', strtotime($tgl_awal)) ?> s/d <?= date('d F Y', strtotime($tgl_akhir)) ?>
-        <?php else : ?>
-            Periode : 01 Desember 2025 s/d 31 Desember 2025
-        <?php endif; ?>
+    <div class="header-kop">
+        <div class="company">PERUSAHAAN AKN-IPB</div>
+        <div class="title">LAPORAN PERUBAHAN MODAL</div>
+        <div class="period">
+            Untuk Tahun Yang Berakhir <?= !empty($tgl_akhir) ? date('d F Y', strtotime($tgl_akhir)) : '31 Desember 2025' ?>
+        </div>
     </div>
 
     <table cellpadding="4" cellspacing="0">
         <tbody>
             <tr class="border-top">
                 <td width="70%"><b>Modal Awal Pemilik</b></td>
-                <td width="30%" class="text-right"><b><?= number_format($modalAwal) ?></b></td>
+                <td width="30%" class="text-right"><b><?= number_format($modalAwal, 0, ',', '.') ?></b></td>
             </tr>
             <tr>
                 <td width="70%">&nbsp;&nbsp;&nbsp;&nbsp;Laba Bersih Periode Berjalan</td>
-                <td width="30%" class="text-right"><?= number_format($labaBersih) ?></td>
+                <td width="30%" class="text-right"><?= number_format($labaBersih, 0, ',', '.') ?></td>
             </tr>
             <tr>
                 <td width="70%">&nbsp;&nbsp;&nbsp;&nbsp;Prive Pemilik</td>
-                <td width="30%" class="text-right">(<?= number_format($prive) ?>)</td>
+                <td width="30%" class="text-right">(<?= number_format($prive, 0, ',', '.') ?>)</td>
             </tr>
             <tr class="border-top">
                 <td width="70%">&nbsp;&nbsp;&nbsp;&nbsp;<b><?= $perubahanNet >= 0 ? 'Kenaikan Bersih Modal' : 'Penurunan Bersih Modal' ?></b></td>
-                <td width="30%" class="text-right"><b><?= number_format($perubahanNet) ?></b></td>
+                <td width="30%" class="text-right"><b><?= number_format($perubahanNet, 0, ',', '.') ?></b></td>
             </tr>
         </tbody>
         <tfoot>
-            <tr class="border-top border-bottom" style="background-color: #f5f5f5;">
+            <tr class="border-top border-double">
                 <td width="70%"><b>MODAL AKHIR PERIODE</b></td>
-                <td width="30%" class="text-right"><b>Rp <?= number_format($modalAkhir) ?></b></td>
+                <td width="30%" class="text-right"><b>Rp <?= number_format($modalAkhir, 0, ',', '.') ?></b></td>
             </tr>
         </tfoot>
     </table>
-
-    <div class="signature">
-        <p>
-            Bogor, 31 Desember 2025<br>
-            Pimpinan AKN<br><br><br><br>
-        </p>
-    </div>
 
 </body>
 </html>

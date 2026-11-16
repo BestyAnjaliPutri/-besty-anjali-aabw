@@ -244,10 +244,10 @@
       <div class="main-sidebar">
         <aside id="sidebar-wrapper">
           <div class="sidebar-brand">
-            <a href="<?= site_url('/') ?>">🌸 SIA - AKN 🌸</a>
+            <a href="<?= site_url('/') ?>"><img src="<?= base_url('template/assets/img/sia-akn-logo.svg') ?>" alt="SIA AKN" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 6px; border-radius: 8px;"> SIA - AKN</a>
           </div>
           <div class="sidebar-brand sidebar-brand-sm">
-            <a href="<?= site_url('/') ?>">🌸</a>
+            <a href="<?= site_url('/') ?>"><img src="<?= base_url('template/assets/img/sia-akn-logo.svg') ?>" alt="SIA" style="width: 28px; height: 28px; border-radius: 7px;"></a>
           </div>
             <ul class="sidebar-menu">
                 <!-- Ini cara memanggil menu -->
@@ -273,7 +273,7 @@
       <?= $this->renderSection("modals") ?>
       <footer class="main-footer">
         <div class="footer-left">
-          Copyright &copy; 2026 <div class="bullet"></div> Made with 💖 & 🌸 by <a href="#">Besty Anjali Putri Setyadi</a> &bull; SV-IPB
+          Copyright &copy; 2026 <div class="bullet"></div> 💖 🌸 by <a href="#">Besty Anjali Putri Setyadi</a> &bull; SV-IPB
         </div>
         <div class="footer-right">
           🌸 Cute Sakura Edition 🌸

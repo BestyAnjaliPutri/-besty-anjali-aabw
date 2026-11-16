@@ -14,7 +14,7 @@
   <div class="section-body">
     <div class="card">
       <div class="card-header d-flex justify-content-between align-items-center">
-        <h4>Neraca Lajur (Kertas Kerja 10 Kolom)</h4>
+        <h4>Neraca Lajur</h4>
         <div>
           <?php 
             $pdfUrl = site_url('neracalajur/neracalajurpdf');

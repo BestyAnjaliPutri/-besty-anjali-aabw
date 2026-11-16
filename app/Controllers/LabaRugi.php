@@ -121,7 +121,7 @@ class LabaRugi extends BaseController
         $pdf->setPrintFooter(false);
         $pdf->SetMargins(15, 15, 15);
         $pdf->AddPage();
-        $pdf->SetFont('helvetica', '', 9);
+        $pdf->SetFont('times', '', 9);
         $pdf->writeHTML($html, true, false, true, false, '');
 
         $this->response->setHeader('Content-Type', 'application/pdf');
