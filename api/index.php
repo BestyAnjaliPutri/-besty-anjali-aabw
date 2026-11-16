@@ -25,8 +25,12 @@ if (getenv('VERCEL') || isset($_ENV['VERCEL']) || isset($_SERVER['VERCEL'])) {
 }
 
 // Backward compatibility alias for Myth:Auth on CodeIgniter 4.4+
-if (! class_exists('CodeIgniter\Entity', false) && class_exists('CodeIgniter\Entity\Entity', true)) {
-    class_alias('CodeIgniter\Entity\Entity', 'CodeIgniter\Entity');
+$ciEntityPath = __DIR__ . '/../vendor/codeigniter4/framework/system/Entity/Entity.php';
+if (file_exists($ciEntityPath)) {
+    require_once $ciEntityPath;
+    if (! class_exists('CodeIgniter\Entity', false)) {
+        class_alias('CodeIgniter\Entity\Entity', 'CodeIgniter\Entity');
+    }
 }
 
 // Forward execution to CodeIgniter 4 Front Controller in public/index.php

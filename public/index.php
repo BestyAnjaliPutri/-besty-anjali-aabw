@@ -53,12 +53,15 @@ require FCPATH . '../app/Config/Paths.php';
 
 $paths = new Paths();
 
+// Backward compatibility alias for Myth:Auth on CodeIgniter 4.4+
+if (file_exists($paths->systemDirectory . '/Entity/Entity.php')) {
+    require_once $paths->systemDirectory . '/Entity/Entity.php';
+    if (! class_exists('CodeIgniter\Entity', false)) {
+        class_alias('CodeIgniter\Entity\Entity', 'CodeIgniter\Entity');
+    }
+}
+
 // LOAD THE FRAMEWORK BOOTSTRAP FILE
 require $paths->systemDirectory . '/Boot.php';
-
-// Backward compatibility alias for Myth:Auth on CodeIgniter 4.4+
-if (! class_exists('CodeIgniter\Entity', false) && class_exists('CodeIgniter\Entity\Entity', true)) {
-    class_alias('CodeIgniter\Entity\Entity', 'CodeIgniter\Entity');
-}
 
 exit(Boot::bootWeb($paths));
