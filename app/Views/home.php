@@ -90,7 +90,7 @@
               <!-- Interactive 3D Model: Zero Two (Tencent Hunyuan3D AI) -->
               <model-viewer
                 id="zerotwo-3d-model"
-                src="<?= site_url('home/zerotwomodel') ?>"
+                src="<?= base_url('template/assets/models/zerotwo.glb') ?>"
                 alt="Zero Two Chibi 3D Model"
                 auto-rotate
                 auto-rotate-delay="400"
