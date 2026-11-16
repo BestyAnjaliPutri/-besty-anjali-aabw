@@ -32,3 +32,8 @@ defined('SHOW_DEBUG_BACKTRACE') || define('SHOW_DEBUG_BACKTRACE', true);
  | items. It can always be used within your own application too.
  */
 defined('CI_DEBUG') || define('CI_DEBUG', true);
+
+// Backward compatibility alias for Myth:Auth on CodeIgniter 4.4+
+if (! class_exists('CodeIgniter\Entity', false) && class_exists('CodeIgniter\Entity\Entity', true)) {
+    class_alias('CodeIgniter\Entity\Entity', 'CodeIgniter\Entity');
+}

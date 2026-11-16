@@ -23,3 +23,8 @@ ini_set('display_errors', '0');
  | release of the framework.
  */
 defined('CI_DEBUG') || define('CI_DEBUG', false);
+
+// Backward compatibility alias for Myth:Auth on CodeIgniter 4.4+
+if (! class_exists('CodeIgniter\Entity', false) && class_exists('CodeIgniter\Entity\Entity', true)) {
+    class_alias('CodeIgniter\Entity\Entity', 'CodeIgniter\Entity');
+}

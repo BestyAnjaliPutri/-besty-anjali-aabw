@@ -56,4 +56,9 @@ $paths = new Paths();
 // LOAD THE FRAMEWORK BOOTSTRAP FILE
 require $paths->systemDirectory . '/Boot.php';
 
+// Backward compatibility alias for Myth:Auth on CodeIgniter 4.4+
+if (! class_exists('CodeIgniter\Entity', false) && class_exists('CodeIgniter\Entity\Entity', true)) {
+    class_alias('CodeIgniter\Entity\Entity', 'CodeIgniter\Entity');
+}
+
 exit(Boot::bootWeb($paths));

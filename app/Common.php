@@ -1,6 +1,16 @@
 <?php
 
 /**
+ * Backward compatibility alias for Myth:Auth on CodeIgniter 4.4+
+ * Prevents "class CodeIgniter\Entity is not available" fatal error
+ */
+if (! class_exists('CodeIgniter\Entity', false)) {
+    if (class_exists('CodeIgniter\Entity\Entity', true)) {
+        class_alias('CodeIgniter\Entity\Entity', 'CodeIgniter\Entity');
+    }
+}
+
+/**
  * The goal of this file is to allow developers a location
  * where they can overwrite core procedural functions and
  * replace them with their own. This file is loaded during
