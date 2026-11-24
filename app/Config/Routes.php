@@ -70,6 +70,9 @@ $routes->resource('penyesuaian');
 $routes->get('/jurnalumum', 'JurnalUmum::index');
 $routes->get('/jurnalumum/cetakjurnal', 'JurnalUmum::cetakjurnal');
 
+$routes->get('/jurnalpenyesuaian', 'JurnalPenyesuaian::index');
+$routes->get('/jurnalpenyesuaian/cetakjurnal', 'JurnalPenyesuaian::cetakjurnal');
+
 $routes->get('/posting', 'Posting::index');
 $routes->get('/posting/cetakposting', 'Posting::cetakposting');
 $routes->get('/posting/postingpdf', 'Posting::postingpdf');

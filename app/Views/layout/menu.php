@@ -9,6 +9,7 @@
               </li>
               <li class="menu-header">Aktiviti</li>
             <li><a class="nav-link" href="<?= site_url('jurnalumum') ?>"><i class="fas fa-calendar-alt"></i> <span>Jurnal Umum</span></a></li>
+            <li><a class="nav-link" href="<?= site_url('jurnalpenyesuaian') ?>"><i class="fas fa-clipboard-check"></i> <span>Jurnal Penyesuaian</span></a></li>
             <li><a class="nav-link" href="<?= site_url('posting') ?>"><i class="fas fa-book"></i> <span>Posting</span></a></li>
             <li><a class="nav-link" href="<?= site_url('neracasaldo') ?>"><i class="fas fa-balance-scale"></i> <span>Neraca Saldo</span></a></li>
             <li><a class="nav-link" href="<?= site_url('neracalajur') ?>"><i class="fas fa-table"></i> <span>Neraca Lajur</span></a></li>

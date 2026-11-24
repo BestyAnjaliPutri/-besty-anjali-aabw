@@ -139,4 +139,25 @@ public function ambilPenyesuaian($tglAwal = null, $tglAkhir = null)
     $query = $builder->get();
     return $query->getResultObject();
 }
+
+public function ambilJurnalPenyesuaian($tglAwal = null, $tglAkhir = null)
+{
+    $builder = $this->db->table('tbl_nilai')
+        ->select('tbl_nilai.*, tbl_transaksi.kwitansi, tbl_transaksi.tanggal, tbl_transaksi.deskripsi, tbl_transaksi.ketjurnal, akun3s.nama_akun3')
+        ->join('tbl_transaksi', 'tbl_transaksi.id_transaksi = tbl_nilai.id_transaksi')
+        ->join('akun3s', 'akun3s.kode_akun3 = tbl_nilai.kode_akun3', 'LEFT')
+        ->where('tbl_transaksi.ketjurnal', 'Penyesuaian');
+
+    if (!empty($tglAwal) && !empty($tglAkhir)) {
+        $builder->where('tbl_transaksi.tanggal >=', $tglAwal)
+                ->where('tbl_transaksi.tanggal <=', $tglAkhir);
+    }
+
+    $builder->orderBy('tbl_transaksi.tanggal', 'ASC')
+            ->orderBy('tbl_transaksi.id_transaksi', 'ASC')
+            ->orderBy('tbl_nilai.debet', 'DESC');
+
+    $query = $builder->get();
+    return $query->getResultObject();
+}
 }
