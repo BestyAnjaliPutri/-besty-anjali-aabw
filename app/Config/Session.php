@@ -134,11 +134,7 @@ class Session extends BaseConfig
     public function __construct()
     {
         parent::__construct();
-
-        if (getenv('VERCEL') || isset($_SERVER['VERCEL'])) {
-            $this->driver   = DatabaseHandler::class;
-            $this->savePath = 'ci_sessions';
-            $this->DBGroup  = 'default';
-        }
+        // On Vercel we keep the default FileHandler for sessions to avoid using SQLite as a session DB.
+        // This ensures compatibility as the DatabaseHandler only supports MySQLi/Postgre drivers.
     }
 }
