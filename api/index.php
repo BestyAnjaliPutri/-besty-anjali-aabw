@@ -33,11 +33,5 @@ if (file_exists($ciEntityPath)) {
     }
 }
 
-// Diagnostic endpoint for debugging database connection on Vercel
-if (str_contains($_SERVER['REQUEST_URI'] ?? '', 'db_diag.php')) {
-    require __DIR__ . '/../public/db_diag.php';
-    exit;
-}
-
 // Forward execution to CodeIgniter 4 Front Controller in public/index.php
 require __DIR__ . '/../public/index.php';
