@@ -64,6 +64,8 @@ Vagrantfile
 !/writable/debugbar/index.html
 
 php_errors.log
+/writable/*.sqlite
+*.sqlite-journal
 
 #-------------------------
 # User Guide Temp Files

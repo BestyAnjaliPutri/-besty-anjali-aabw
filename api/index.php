@@ -22,6 +22,16 @@ if (getenv('VERCEL') || isset($_ENV['VERCEL']) || isset($_SERVER['VERCEL'])) {
             @mkdir($path, 0777, true);
         }
     }
+
+    // Prepare SQLite database in writable /tmp
+    $sourceSqlite = __DIR__ . '/../app/Database/aabw.sqlite';
+    $targetSqlite = '/tmp/aabw.sqlite';
+    if (file_exists($sourceSqlite)) {
+        if (!file_exists($targetSqlite) || filesize($targetSqlite) !== filesize($sourceSqlite)) {
+            @copy($sourceSqlite, $targetSqlite);
+            @chmod($targetSqlite, 0666);
+        }
+    }
 }
 
 // Backward compatibility alias for Myth:Auth on CodeIgniter 4.4+

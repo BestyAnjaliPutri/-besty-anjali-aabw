@@ -275,5 +275,71 @@ class Database extends Config
 
         // Disable strict mode so ONLY_FULL_GROUP_BY doesn't crash queries on TiDB / MySQL 8
         $this->default['strictOn'] = false;
+
+        // Automatic SQLite failover for Vercel / serverless deployments
+        $isVercel = (getenv('VERCEL') || isset($_ENV['VERCEL']) || isset($_SERVER['VERCEL']));
+        $sqliteFile = file_exists('/tmp/aabw.sqlite') ? '/tmp/aabw.sqlite' : (APPPATH . 'Database/aabw.sqlite');
+
+        if ($isVercel && file_exists($sqliteFile)) {
+            $flagFailed = '/tmp/.mysql_failed';
+            $useSqlite = false;
+
+            if (file_exists($flagFailed) && (time() - filemtime($flagFailed) < 300)) {
+                $useSqlite = true;
+            } else {
+                try {
+                    $prevReport = mysqli_report(MYSQLI_REPORT_OFF);
+                    $test = @mysqli_init();
+                    if ($test) {
+                        @mysqli_options($test, MYSQLI_OPT_CONNECT_TIMEOUT, 1);
+                        if (!empty($this->default['encrypt']['ssl_ca']) && file_exists($this->default['encrypt']['ssl_ca'])) {
+                            @mysqli_ssl_set($test, null, null, $this->default['encrypt']['ssl_ca'], null, null);
+                        }
+                        $ok = @mysqli_real_connect(
+                            $test,
+                            $this->default['hostname'] ?? 'localhost',
+                            $this->default['username'] ?? '',
+                            $this->default['password'] ?? '',
+                            $this->default['database'] ?? '',
+                            (int)($this->default['port'] ?? 3306)
+                        );
+                        if ($ok) {
+                            @mysqli_close($test);
+                        } else {
+                            $useSqlite = true;
+                            @file_put_contents($flagFailed, '1');
+                        }
+                    } else {
+                        $useSqlite = true;
+                        @file_put_contents($flagFailed, '1');
+                    }
+                    if (isset($prevReport)) {
+                        mysqli_report($prevReport);
+                    }
+                } catch (\Throwable $e) {
+                    $useSqlite = true;
+                    @file_put_contents($flagFailed, '1');
+                }
+            }
+
+            if ($useSqlite) {
+                $this->default = [
+                    'database'    => $sqliteFile,
+                    'DBDriver'    => 'SQLite3',
+                    'DBPrefix'    => '',
+                    'DBDebug'     => false,
+                    'swapPre'     => '',
+                    'failover'    => [],
+                    'foreignKeys' => false,
+                    'busyTimeout' => 5000,
+                    'synchronous' => null,
+                    'dateFormat'  => [
+                        'date'     => 'Y-m-d',
+                        'datetime' => 'Y-m-d H:i:s',
+                        'time'     => 'H:i:s',
+                    ],
+                ];
+            }
+        }
     }
 }

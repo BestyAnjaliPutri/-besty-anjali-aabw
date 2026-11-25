@@ -48,17 +48,23 @@ class ModelTransaksi extends Model
     // protected $afterDelete    = [];
 
     public function noKwitansi()
-{
-    $number = $this->db->table('tbl_transaksi')->select('RIGHT(tbl_transaksi.kwitansi,4) as kwitansi', FALSE)
-        ->orderBy('kwitansi', 'DESC')->limit(1)->get()->getRowArray();
+    {
+        $dbDriver = $this->db->DBDriver ?? '';
+        if ($dbDriver === 'SQLite3') {
+            $number = $this->db->table('tbl_transaksi')->select('SUBSTR(tbl_transaksi.kwitansi, -4) as kwitansi', FALSE)
+                ->orderBy('kwitansi', 'DESC')->limit(1)->get()->getRowArray();
+        } else {
+            $number = $this->db->table('tbl_transaksi')->select('RIGHT(tbl_transaksi.kwitansi,4) as kwitansi', FALSE)
+                ->orderBy('kwitansi', 'DESC')->limit(1)->get()->getRowArray();
+        }
 
-    if ($number == null) {
-        $no = 1;
-    } else {
-        $no = intval($number['kwitansi']) + 1;
+        if ($number == null) {
+            $no = 1;
+        } else {
+            $no = intval($number['kwitansi']) + 1;
+        }
+
+        $nomor_kwitansi = str_pad($no, 4, "0", STR_PAD_LEFT);
+        return $nomor_kwitansi;
     }
-
-    $nomor_kwitansi = str_pad($no, 4, "0", STR_PAD_LEFT);
-    return $nomor_kwitansi;
-}
 }
